@@ -94,6 +94,14 @@ class DiscordAuthController implements RequestHandlerInterface
             throw new Exception('Invalid state');
         }
 
+        $error = array_get($queryParams, "error", "false");
+        $error_description = array_get($queryParams, "error_description", "false");
+
+        if($error){
+            $session->remove('oauth2state');
+            throw new Exception("oAuth Flow Error - " . $error . " : " . $error_description);
+        }
+
         $token = $provider->getAccessToken('authorization_code', compact('code'));
 
         /** @var DiscordResourceOwner $user */
