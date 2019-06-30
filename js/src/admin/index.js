@@ -1,7 +1,7 @@
 import app from 'flarum/app';
 
-import GithubSettingsModal from './components/GithubSettingsModal';
+import DiscordSettingsModal from './components/DiscordSettingsModal';
 
-app.initializers.add('flarum-auth-github', () => {
-  app.extensionSettings['flarum-auth-github'] = () => app.modal.show(new GithubSettingsModal());
+app.initializers.add('pcnnet-auth-discord', () => {
+  app.extensionSettings['pcnnet-auth-discord'] = () => app.modal.show(new DiscordSettingsModal());
 });

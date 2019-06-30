@@ -3,14 +3,14 @@ import app from 'flarum/app';
 import LogInButtons from 'flarum/components/LogInButtons';
 import LogInButton from 'flarum/components/LogInButton';
 
-app.initializers.add('flarum-auth-github', () => {
+app.initializers.add('pcnnet-auth-discord', () => {
   extend(LogInButtons.prototype, 'items', function(items) {
-    items.add('github',
+    items.add('discord',
       <LogInButton
-        className="Button LogInButton--github"
-        icon="fab fa-github"
-        path="/auth/github">
-        {app.translator.trans('flarum-auth-github.forum.log_in.with_github_button')}
+        className="Button LogInButton--discord"
+        icon="fab fa-discord"
+        path="/auth/discord">
+        {app.translator.trans('pcnnet-flarum-auth-discord.forum.log_in.with_discord_button')}
       </LogInButton>
     );
   });

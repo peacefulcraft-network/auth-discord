@@ -7,24 +7,30 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ * 
+ * -----
+ * pcnnet\discord:
+ * Adapted by Parsonswy <parsonswy@gmail.com> June 29th, 2019
+ * PeacefulCraft Network
+ * -----
  */
 
-namespace Flarum\Auth\Github;
+namespace pcnnet\discord;
 
 use Exception;
 use Flarum\Forum\Auth\Registration;
 use Flarum\Forum\Auth\ResponseFactory;
 use Flarum\Http\UrlGenerator;
 use Flarum\Settings\SettingsRepositoryInterface;
-use League\OAuth2\Client\Provider\Github;
-use League\OAuth2\Client\Provider\GithubResourceOwner;
+use Wohali\OAuth2\Client\Provider\Discord;
+use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Diactoros\Response\RedirectResponse;
 
-class GithubAuthController implements RequestHandlerInterface
+class DiscordAuthController implements RequestHandlerInterface
 {
     /**
      * @var ResponseFactory
@@ -60,11 +66,11 @@ class GithubAuthController implements RequestHandlerInterface
      */
     public function handle(Request $request): ResponseInterface
     {
-        $redirectUri = $this->url->to('forum')->route('auth.github');
+        $redirectUri = $this->url->to('forum')->route('auth.discord');
 
-        $provider = new Github([
-            'clientId' => $this->settings->get('flarum-auth-github.client_id'),
-            'clientSecret' => $this->settings->get('flarum-auth-github.client_secret'),
+        $provider = new Discord([
+            'clientId' => $this->settings->get('pcnnet.flarum-auth-discord.client_id'),
+            'clientSecret' => $this->settings->get('pcnnet.flarum-auth-discord.client_secret'),
             'redirectUri' => $redirectUri
         ]);
 
@@ -74,7 +80,7 @@ class GithubAuthController implements RequestHandlerInterface
         $code = array_get($queryParams, 'code');
 
         if (! $code) {
-            $authUrl = $provider->getAuthorizationUrl(['scope' => ['user:email']]);
+            $authUrl = $provider->getAuthorizationUrl(['scope' => ['identify', 'email']]);
             $session->put('oauth2state', $provider->getState());
 
             return new RedirectResponse($authUrl.'&display=popup');
@@ -90,22 +96,22 @@ class GithubAuthController implements RequestHandlerInterface
 
         $token = $provider->getAccessToken('authorization_code', compact('code'));
 
-        /** @var GithubResourceOwner $user */
+        /** @var DiscordResourceOwner $user */
         $user = $provider->getResourceOwner($token);
 
         return $this->response->make(
-            'github', $user->getId(),
+            'discord', $user->getId(),
             function (Registration $registration) use ($user, $provider, $token) {
                 $registration
                     ->provideTrustedEmail($user->getEmail() ?: $this->getEmailFromApi($provider, $token))
-                    ->provideAvatar(array_get($user->toArray(), 'avatar_url'))
-                    ->suggestUsername($user->getNickname())
+                    ->provideAvatar($user->getAvatarHash() ?: "")
+                    ->suggestUsername($user->getUsername())
                     ->setPayload($user->toArray());
             }
         );
     }
 
-    private function getEmailFromApi(Github $provider, AccessToken $token)
+    private function getEmailFromApi(Discord $provider, AccessToken $token)
     {
         $url = $provider->apiDomain.'/user/emails';
 

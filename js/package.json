@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@flarum/auth-github",
+  "name": "@pcnnet/flarum-auth-discord",
   "dependencies": {
     "flarum-webpack-config": "0.1.0-beta.10",
     "webpack": "^4.26.0",

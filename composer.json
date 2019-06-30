@@ -1,26 +1,22 @@
 {
-    "name": "flarum/auth-github",
-    "description": "Allow users to log in with GitHub.",
+    "name": "pcnnet/flarum-auth-discord",
+    "description": "Allow users to log in with Discord.",
     "type": "flarum-extension",
     "keywords": ["authentication"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Toby Zerner",
-            "email": "toby.zerner@gmail.com"
+            "name": "Parsonswy",
+            "email": "parsonswy@gmail.com"
         }
     ],
-    "support": {
-        "issues": "https://github.com/flarum/core/issues",
-        "source": "https://github.com/flarum/auth-github"
-    },
     "require": {
-        "flarum/core": "^0.1.0-beta.9",
-        "league/oauth2-github": "^2.0"
+        "flarum/core": "^0.1.0-beta.8.1",
+        "wohali/oauth2-discord-new": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "Flarum\\Auth\\Github\\": "src/"
+            "pcnnet\\discord\\": "src/"
         }
     },
     "extra": {
@@ -28,11 +24,11 @@
             "dev-master": "0.1.x-dev"
         },
         "flarum-extension": {
-            "title": "GitHub Login",
+            "title": "Discord Login",
             "icon": {
-                "name": "fab fa-github",
-                "backgroundColor": "#eee",
-                "color": "#333"
+                "name": "fab fa-discord",
+                "backgroundColor": "#7289da",
+                "color": "#FFF"
             }
         }
     }

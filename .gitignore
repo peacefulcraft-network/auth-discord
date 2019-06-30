@@ -1,6 +1,2 @@
-/vendor
-composer.phar
-.DS_Store
-Thumbs.db
-node_modules
-js/dist/*
+/vendor/
+/js/node_modules
