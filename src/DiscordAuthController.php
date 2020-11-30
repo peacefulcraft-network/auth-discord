@@ -77,7 +77,7 @@ class DiscordAuthController implements RequestHandlerInterface
         $session = $request->getAttribute('session');
         $queryParams = $request->getQueryParams();
 
-        $code = array_get($queryParams, 'code');
+        $code = $queryParams['code'];
 
         if (! $code) {
             $authUrl = $provider->getAuthorizationUrl(['scope' => ['identify', 'email']]);
@@ -86,7 +86,7 @@ class DiscordAuthController implements RequestHandlerInterface
             return new RedirectResponse($authUrl.'&display=popup');
         }
 
-        $state = array_get($queryParams, 'state');
+        $state = $queryParams['state'];
 
         if (! $state || $state !== $session->get('oauth2state')) {
             $session->remove('oauth2state');
@@ -94,8 +94,8 @@ class DiscordAuthController implements RequestHandlerInterface
             throw new Exception('Invalid state');
         }
 
-        $error = array_get($queryParams, "error");
-        $error_description = array_get($queryParams, "error_description");
+        $error = $queryParams['error'];
+        $error_description = $queryParams['error_description'];
 
         if($error){
             $session->remove('oauth2state');
